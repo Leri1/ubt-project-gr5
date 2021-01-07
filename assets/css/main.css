@@ -58,4 +58,7 @@ body {
         display: block;
         text-align: left;
     }
+    .card {
+        width: 100%;
+    }
 }

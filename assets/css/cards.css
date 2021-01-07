@@ -1,0 +1,17 @@
+.card {
+    color: white;
+    float: left;
+    width: calc(31% - 20px);
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px;
+    height: 200px;
+}
+.card p {
+    font-size: 18px;
+}
+.cardContainer:after {
+    content: "";
+    display: table;
+    clear: both;
+}
