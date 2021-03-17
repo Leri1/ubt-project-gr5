@@ -1,3 +1,49 @@
+<?php
+require_once "database/Connection.php";
+
+$errors = '';
+$success = '';
+
+if (isset($_POST['loginUser'])) {
+
+    $securePost = filter_var_array($_POST, FILTER_SANITIZE_STRING);
+
+    if (empty($securePost['email'])) {
+        $errors = 'Email is empty';
+    } elseif (empty($securePost['password'])) {
+        $errors = 'Password is empty';
+    } elseif (!checkIfUserIsReadyToLogIN($securePost['email'], $securePost['password'])) {
+        $errors = 'Invalid credentials';
+    }
+
+    if (empty($errors)) {
+
+        $success = 'Successfully logged in!';
+
+    }
+
+}
+
+function checkIfUserIsReadyToLogIN($email, $password)
+{
+
+    $sql = "SELECT password AS userPassword FROM users WHERE email = ?";
+    $stmt = Connection::getConnection()->prepare($sql)->execute([$email]);
+    $result = $stmt->fetch();
+
+    if (!$result) {
+        return false;
+    }
+
+    if ($password === $result['userPassword']) {
+        return true;
+    }
+
+    return false;
+
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +65,10 @@
     <a href="login.php" class="active">Login</a>
 </div>
 <div class="container">
+    <?php
+    echo $success;
+    echo $errors;
+    ?>
     <form id="loginForm" action="" method="POST" onsubmit="ValidateForm()">
         <div class="row">
             <div class="col-25">
@@ -40,7 +90,7 @@
         <div class="col-2">
         </div>
         <div class="row">
-            <input type="Submit" value="Login">
+            <input type="Submit" name="loginUser" value="Login">
         </div>
     </form>
 </div>

@@ -1,3 +1,42 @@
+<?php
+require_once "database/Connection.php";
+
+$errors = '';
+$success = '';
+
+if (isset($_POST['contactUs'])) {
+
+    $securePost = filter_var_array($_POST, FILTER_SANITIZE_STRING);
+
+    if (empty($securePost['firstname'])) {
+        $errors = 'Firstname is empty';
+    } elseif ($securePost['lastname']) {
+        $errors = 'Lastname is empty';
+    } elseif ($securePost['email']) {
+        $errors = 'Email is empty';
+    } elseif (empty($securePost['message'])) {
+        $errors = 'Message is empty';
+    } elseif (!filter_var($securePost['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors = 'Invalid Email';
+    }
+
+    if (!empty($errors)) {
+
+        $sql = "INSERT INTO contacts (firstname,lastname,email,message) VALUES (?,?,?,?)";
+        Connection::getConnection()->prepare($sql)->execute([
+            $securePost['firstname'],
+            $securePost['lastname'],
+            $securePost['email'],
+            $securePost['message']
+        ]);
+
+        $success = 'Message sent successfully!';
+
+    }
+
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +58,10 @@
     <a href="login.php">Login</a>
 </div>
 <div class="container">
+    <?php
+    echo $success;
+    echo $errors;
+    ?>
     <form id="contactForm" action="" onsubmit="validateForm()" method="POST">
         <div class="row">
             <div class="col-25">
@@ -46,14 +89,14 @@
         </div>
         <div class="row">
             <div class="col-25">
-                <label for="subject">Subject</label>
+                <label for="subject">Message</label>
             </div>
             <div class="col-75">
                 <textarea id="subject" name="message" placeholder="Write something.." style="height:200px"></textarea>
             </div>
         </div>
         <div class="row">
-            <input type="submit" value="Submit">
+            <input type="submit" name="contactUs" value="Submit">
         </div>
     </form>
 </div>

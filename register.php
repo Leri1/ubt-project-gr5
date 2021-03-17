@@ -1,3 +1,53 @@
+<?php
+
+require_once "database/Connection.php";
+
+$errors = '';
+$success = '';
+
+if (isset($_POST['registerUser'])) {
+
+    $securePost = filter_var_array($_POST, FILTER_SANITIZE_STRING);
+
+    if (empty($securePost['firstname'])) {
+        $errors = 'Firstname is empty';
+    } elseif (empty($securePost['lastname'])) {
+        $errors = 'Lastname is empty';
+    } elseif (empty($securePost['email'])) {
+        $errors = 'Email is empty';
+    } elseif (empty($securePost['user_password'])) {
+        $errors = 'Password is empty';
+    } elseif (empty($securePost['confirm_password'])) {
+        $errors = 'Repeat password is empty';
+    } elseif (empty($securePost['gender'])) {
+        $errors = 'Gender is empty';
+    } elseif (empty($securePost['birthday'])) {
+        $errors = 'Birthday is empty';
+    } elseif (!filter_var($securePost['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors = 'Invalid Email';
+    } elseif ($securePost['user_password'] !== $securePost['confirm_password']) {
+        $errors = 'Passwords are not the same';
+    }
+
+    if (empty($errors)) {
+
+        $sql = "INSERT INTO users (firstname,lastname,email,password,gender,birthday) VALUES (?,?,?,?,?,?)";
+        $stmt = Connection::getConnection()->prepare($sql)->execute([
+            $securePost['firstname'],
+            $securePost['lastname'],
+            $securePost['email'],
+            $securePost['user_password'],
+            $securePost['gender'],
+            $securePost['birthday']
+        ]);
+
+        $success = 'Account Created Successfully!';
+
+    }
+
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +69,10 @@
     <a href="login.php">Login</a>
 </div>
 <div class="container">
+    <?php
+    echo $errors;
+    echo $success;
+    ?>
     <form id="registerForm" action="" method="POST" onsubmit="ValidateForm()">
         <div class="row">
             <div class="col-25">
@@ -80,7 +134,7 @@
             </div>
         </div>
         <div class="row">
-            <input type="submit" value="Register">
+            <input type="submit" name="registerUser" value="Register">
         </div>
     </form>
 </div>

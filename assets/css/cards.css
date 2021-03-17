@@ -2,10 +2,10 @@
     color: white;
     float: left;
     width: calc(31% - 20px);
-    padding: 10px;
+    padding: 3px;
     border-radius: 10px;
     margin: 10px;
-    height: 200px;
+    height: 220px;
     margin-left: 23px;
 }
 .card p {
