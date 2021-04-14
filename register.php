@@ -63,7 +63,7 @@ if (isset($_POST['registerUser'])) {
 <body>
 <div class="topnav" id="myTopnav">
     <a href="index.html">Home</a>
-    <a href="products.html">Offers</a>
+    <a href="products.php">Offers</a>
     <a href="contact.php">Contact</a>
     <a href="register.php" class="active">Register</a>
     <a href="login.php">Login</a>
@@ -201,8 +201,6 @@ if (isset($_POST['registerUser'])) {
         let birthday = document.forms["registerForm"]["birthday"].value;
 
         let mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-        let birthdayValidation = /^([0-9]{2})-([0-9]{2})-([0-9]{4})$/;
-        let dateNow = new Date();
 
         if (firstname == "") {
             alert("Firstname is required");
@@ -247,11 +245,6 @@ if (isset($_POST['registerUser'])) {
         }
         if (birthday == "") {
             alert("Birthday is required");
-            return false;
-        }
-
-        if (!birthday.match(birthdayValidation)) {
-            alert('You should be at least 18 years old to register');
             return false;
         }
 

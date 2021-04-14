@@ -16,3 +16,10 @@ CREATE TABLE contacts(
     `message` text not null,
     `created_at` datetime default CURRENT_TIMESTAMP()
 )
+
+CREATE TABLE services(
+   `id` int AUTO_INCREMENT primary key,
+   `service_title` varchar(155) not null,
+   `service_description` text,
+   `created_at` datetime default CURRENT_TIMESTAMP()
+)

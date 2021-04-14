@@ -4,7 +4,7 @@ class Connection {
 
     public static function getConnection()
     {
-        return new PDO("mysql:host=localhost;dbname=myDB", 'root', '');
+        return new PDO("mysql:host=localhost;dbname=ubtDB", 'root', '');
     }
 
 }

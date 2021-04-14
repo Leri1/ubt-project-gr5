@@ -1,9 +1,17 @@
+<?php
+require_once "database/Connection.php";
+
+if (isset($_GET['delete_product'])) {
+    Connection::getConnection()->query('DELETE FROM services WHERE id = '. $_GET['delete_product'])->execute();
+    header('Location: products.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>UBT Bank Offers</title>
     <link rel="icon" type="image/png" href="assets/images/UBTBank1.png">
-    <title>UBT Bank Homepage</title>
     <link href="assets/css/main.css" rel="stylesheet" type="text/css">
     <link href="assets/css/slider.css" rel="stylesheet" type="text/css">
     <link href="assets/css/footer.css" rel="stylesheet" type="text/css">
@@ -13,42 +21,50 @@
 </head>
 <body>
 <div class="topnav" id="myTopnav">
-    <a href="index.html" class="active">Home</a>
-    <a href="products.php">Offers</a>
+    <a href="index.html">Home</a>
+    <a href="products.php" class="active">Offers</a>
     <a href="contact.php">Contact</a>
     <a href="register.php">Register</a>
     <a href="login.php">Login</a>
-    <p>UBTBank</p>
 </div>
-
 <div class="container">
-    <h1 style="color: black">News</h1>
-<div id="slider">
-    <a href="#" class="control_next">>></a>
-    <a href="#" class="control_prev"><</a>
-    <ul>
-        <li style="color: black;"><img src="assets/images/ebanking.jpg"></li>
-        <li style="color: white;"><img src="assets/images/analysis.png">SLIDE 2</li>
-    </ul>
-</div>
-
+    <h1 style="color: black">Offers</h1>
+    <div id="slider">
+        <a href="#" class="control_next">>></a>
+        <a href="#" class="control_prev"><</a>
+        <ul>
+            <li style="background: #aaa;"><img src="assets/images/credit.jpg">Loans : Up to 20.000$</li>
+            <li style="background: #aaa;"><img src="assets/images/stonks.jpg"style="width: 500px;height: 300px">Investments : Invest to Profit</li>
+        </ul>
+    </div>
+    <a href="create_product.php">Create Product</a>
     <div class="cardContainer">
         <div class="card" style="background-color:rgb(153, 29, 224);">
-            <h2>Financing</h2>
-            <p>
-                UBTBank in Kosovo launches Financing Initiative certified for real estate developers and homeowners with the best offers in the market.</p>
+            <h2>E-Banking</h2>
+            <p>UBT Bank Internet Branch is a 24/7 service. You can perform all your banking transactions anywhere, you just need a PC.</p>
         </div>
         <div class="card" style="background-color:rgb(12, 126, 120);">
-            <h2>Announcement</h2>
-            <p>Notice we have changed the price list of the services at UBTBank.
-            </p>
+            <h2>Currency Exchange</h2>
+            <p>You can buy/sell with foreign currencies in Ubt Bank including : Dollar,LEK, Yen</p>
         </div>
         <div class="card" style="background-color:rgb(207, 41, 91);">
-            <h2>New loan offers</h2>
-            <p>Now you can get individual loans up to 15,000 euros without guarantors. This offer is dedicated to individual clients by offering financing which can serve you to meet your requirements and make various investments. </p>
+            <h2>Invest to Profit</h2>
+            <p>We guarantee you a stable income with a net profit of up to 6.5% per day.</p>
         </div>
+        <?php
+        $query = "SELECT * FROM services";
+        $services =Connection::getConnection()->query($query)->fetchAll();
+        foreach ($services as $service) {
+        ?>
+            <div class="card" style="background-color:rgb(207, 41, 91);">
+                <h2><?= $service['service_title'] ?></h2>
+                <p><?= $service['service_description'] ?></p>
+                <p><a href="products.php?delete_product=<?php echo $service['id']; ?>">Delete Service</a></p>
+            </div>
+        <?php
+        }
+        ?>
     </div>
-
 </div>
 
 </body>
@@ -103,7 +119,9 @@
         <div class="clearfix"></div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 <script src="assets/js/slider.js"></script>
+
 <!-- END OF FOOTER -->
 </html>
